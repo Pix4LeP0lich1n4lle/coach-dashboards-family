@@ -1,0 +1,44 @@
+name: Sync Daily Stats
+
+on:
+  schedule:
+    # 9 PM EST = 2 AM UTC (next day)
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  sync-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout family repo
+        uses: actions/checkout@v3
+
+      - name: Download stats from admin repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Clone admin repo (private access via token)
+          git clone https://oauth2:$GITHUB_TOKEN@github.com/Pix4LeP0lich1n4lle/coach-dashboards-admin.git /tmp/admin
+          
+          # Copy ONLY stats files (no personal data)
+          cp /tmp/admin/advanced-analytics/*.json weekly-stats/ 2>/dev/null || true
+          cp /tmp/admin/advanced-analytics/*.md weekly-stats/ 2>/dev/null || true
+          
+          echo "✅ Stats synced"
+
+      - name: Update timestamp
+        run: |
+          echo "Last updated: $(date -u +'%Y-%m-%d %H:%M:%S UTC')" >> weekly-stats/S09_summary.md
+
+      - name: Commit and push
+        run: |
+          git config user.name "Coach Bot"
+          git config user.email "bot@coach.local"
+          
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git add -A
+            git commit -m "Auto: Daily stats sync ($(date +'%Y-%m-%d'))"
+            git push
+          fi
