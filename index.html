@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coach Dashboard — 9-Week Global Progression</title>
+    <title>Coach Dashboard — Journal d'Action Interactif</title>
     <style>
         * {
             margin: 0;
@@ -12,60 +12,62 @@
         }
 
         :root {
-            --bg-primary: #0f1419;
-            --bg-secondary: #1a1f2e;
-            --bg-tertiary: #242d3d;
+            --bg-primary: #0a0e17;
+            --bg-secondary: #13192a;
+            --bg-tertiary: #1a2238;
             --text-primary: #e8eef5;
             --text-secondary: #a8b2c1;
+            --text-muted: #6b7687;
             --accent-fire: #ff5e4d;
             --accent-green: #2ecc71;
             --accent-yellow: #f39c12;
             --accent-gray: #495566;
-            --border: #2a3544;
+            --border: #252d3d;
             --hover: rgba(255, 255, 255, 0.08);
         }
 
         html.light-mode {
             --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fb;
-            --bg-tertiary: #eff2f5;
+            --bg-secondary: #f8f9fc;
+            --bg-tertiary: #eff2f8;
             --text-primary: #1a202c;
             --text-secondary: #4a5568;
-            --accent-fire: #ff5e4d;
-            --accent-green: #2ecc71;
-            --accent-yellow: #f39c12;
-            --accent-gray: #cbd5e0;
+            --text-muted: #718096;
             --border: #e2e8f0;
             --hover: rgba(0, 0, 0, 0.04);
         }
 
         body {
-            font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            transition: background-color 0.3s, color 0.3s;
             line-height: 1.6;
-            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Header */
         .header {
             position: sticky;
             top: 0;
             z-index: 100;
             background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
             border-bottom: 1px solid var(--border);
-            padding: 1.5rem;
+            padding: 1.5rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             backdrop-filter: blur(10px);
         }
 
-        .header h1 {
+        .header-left h1 {
             font-size: 1.8rem;
-            font-weight: 600;
+            font-weight: 700;
             letter-spacing: -0.5px;
+            margin-bottom: 0.3rem;
+        }
+
+        .header-left p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
         }
 
         .header-right {
@@ -89,108 +91,147 @@
             background: var(--hover);
         }
 
-        /* Container */
         .container {
             max-width: 1600px;
             margin: 0 auto;
             padding: 2rem;
         }
 
-        /* Status Badge */
-        .status-badge {
-            display: inline-block;
-            background: var(--accent-yellow);
-            color: #000;
-            padding: 0.4rem 0.8rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            margin-top: 0.5rem;
-        }
-
-        /* Grid Layout */
-        .grid-2 {
+        .global-stats {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 3rem;
         }
 
         @media (max-width: 1200px) {
-            .grid-2 {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Card */
-        .card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 2rem;
-            transition: all 0.3s;
-        }
-
-        .card:hover {
-            border-color: var(--accent-fire);
-            background: var(--bg-tertiary);
-        }
-
-        .card-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-        }
-
-        /* Team Stats */
-        .team-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 900px) {
-            .team-stats {
+            .global-stats {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        .stat-box {
-            background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%);
-            padding: 1.5rem;
-            border-radius: 8px;
+        .stat-card {
+            background: var(--bg-secondary);
             border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
             text-align: center;
         }
 
         .stat-value {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 700;
             color: var(--accent-fire);
             margin-bottom: 0.5rem;
-            font-family: 'Courier New', monospace;
+            font-family: 'IBM Plex Mono', monospace;
         }
 
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        /* Participants Grid */
-        .participants-container {
+        .week-selector-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .week-selector-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .selector-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .selector-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .week-selector {
+            padding: 0.8rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'IBM Plex Mono', monospace;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .week-selector:hover {
+            border-color: var(--accent-fire);
+            background: var(--hover);
+        }
+
+        .week-info {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .week-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .week-info-item {
+            text-align: center;
+        }
+
+        .week-info-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .week-info-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 0.3rem;
+        }
+
+        .participants-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 1rem;
+            gap: 1.5rem;
             margin-bottom: 3rem;
         }
 
-        @media (max-width: 1400px) {
-            .participants-container {
+        @media (max-width: 1200px) {
+            .participants-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .participants-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -200,177 +241,258 @@
             border-radius: 8px;
             padding: 1.5rem;
             transition: all 0.3s;
+            animation: fadeInUp 0.6s ease-out;
         }
 
         .participant-card:hover {
             border-color: var(--accent-fire);
+            background: var(--hover);
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 94, 77, 0.1);
         }
+
+        .participant-card:nth-child(1) { animation-delay: 0.05s; }
+        .participant-card:nth-child(2) { animation-delay: 0.1s; }
+        .participant-card:nth-child(3) { animation-delay: 0.15s; }
+        .participant-card:nth-child(4) { animation-delay: 0.2s; }
+        .participant-card:nth-child(5) { animation-delay: 0.25s; }
 
         .participant-name {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
             color: var(--text-primary);
+            margin-bottom: 0.5rem;
         }
 
-        .participant-meta {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-        }
-
-        /* Sparkline */
-        svg.sparkline {
-            width: 100%;
-            height: 40px;
-            margin-bottom: 1rem;
-        }
-
-        .sparkline-path {
-            stroke: var(--accent-fire);
-            stroke-width: 2;
-            fill: none;
-        }
-
-        .sparkline-area {
-            fill: url(#sparklineGradient);
-            opacity: 0.3;
-        }
-
-        /* Heatmap */
-        .heatmap-section {
-            margin-bottom: 3rem;
-        }
-
-        .heatmap {
-            display: grid;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .heatmap-row {
-            display: grid;
-            grid-template-columns: 150px repeat(9, 1fr);
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .heatmap-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 0.5rem;
-            text-align: right;
-            color: var(--text-secondary);
-        }
-
-        .heatmap-cell {
-            aspect-ratio: 1;
+        .engagement-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
             border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             font-size: 0.75rem;
             font-weight: 600;
-            font-family: 'Courier New', monospace;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
         }
 
-        .heatmap-cell:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 16px rgba(255, 94, 77, 0.3);
-            z-index: 10;
-        }
-
-        /* Heatmap colors */
-        .heat-feu {
-            background: linear-gradient(135deg, var(--accent-fire) 0%, #ff7766 100%);
+        .engagement-feu {
+            background: var(--accent-fire);
             color: white;
         }
 
-        .heat-engagement {
-            background: linear-gradient(135deg, var(--accent-green) 0%, #4ece71 100%);
+        .engagement-engagement {
+            background: var(--accent-green);
             color: white;
         }
 
-        .heat-fading {
-            background: linear-gradient(135deg, var(--accent-yellow) 0%, #f5af3d 100%);
+        .engagement-fading {
+            background: var(--accent-yellow);
             color: #000;
         }
 
-        .heat-ghost {
-            background: linear-gradient(135deg, var(--accent-gray) 0%, #5a6577 100%);
+        .engagement-ghost {
+            background: var(--accent-gray);
             color: white;
         }
 
-        .heat-0 {
-            background: var(--bg-tertiary);
-            color: var(--text-secondary);
-            opacity: 0.5;
+        .participant-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border);
         }
 
-        /* Weekly Stats Table */
-        .weekly-table {
+        .participant-stat:last-child {
+            border-bottom: none;
+        }
+
+        .participant-stat-value {
+            font-weight: 700;
+            color: var(--accent-fire);
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .entries-by-day {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .entries-by-day p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .day-bars {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.3rem;
+        }
+
+        .day-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .day-bar-fill {
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(180deg, var(--accent-fire), var(--accent-yellow));
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .day-bar-fill.empty {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+        }
+
+        .day-bar-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .journal-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .journal-entries-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .journal-entry {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s;
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        .journal-entry:hover {
+            background: var(--hover);
+        }
+
+        .journal-entry:last-child {
+            border-bottom: none;
+        }
+
+        .journal-entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.8rem;
+        }
+
+        .journal-participant {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .journal-timestamp {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-fire);
+            font-weight: 600;
+        }
+
+        .journal-day {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 0.2rem;
+        }
+
+        .journal-action {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            border-left: 3px solid var(--accent-fire);
+        }
+
+        .journal-action-icon {
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .stats-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 1.5rem;
             font-size: 0.9rem;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .weekly-table thead {
+        .stats-table thead {
             background: var(--bg-tertiary);
             border-bottom: 2px solid var(--border);
         }
 
-        .weekly-table th {
+        .stats-table th {
             padding: 1rem;
             text-align: left;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--text-primary);
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             letter-spacing: 0.5px;
+            font-family: 'IBM Plex Mono', monospace;
         }
 
-        .weekly-table td {
-            padding: 1rem;
+        .stats-table td {
+            padding: 0.8rem 1rem;
             border-bottom: 1px solid var(--border);
         }
 
-        .weekly-table tbody tr:hover {
-            background: var(--bg-tertiary);
+        .stats-table tbody tr:hover {
+            background: var(--hover);
         }
 
-        .rate-cell {
-            font-family: 'Courier New', monospace;
-            font-weight: 600;
+        .stats-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .count-cell {
+            font-weight: 700;
             color: var(--accent-fire);
+            font-family: 'IBM Plex Mono', monospace;
         }
 
-        /* Trend Indicator */
-        .trend {
-            display: inline-block;
-            margin-left: 0.5rem;
-            font-size: 0.8rem;
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
         }
 
-        .trend-up {
-            color: var(--accent-green);
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
         }
 
-        .trend-down {
-            color: var(--accent-fire);
-        }
-
-        .trend-flat {
-            color: var(--text-secondary);
-        }
-
-        /* Animations */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -382,513 +504,266 @@
             }
         }
 
-        .card {
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .participant-card {
-            animation: fadeInUp 0.6s ease-out;
-        }
-
-        .participant-card:nth-child(1) { animation-delay: 0.05s; }
-        .participant-card:nth-child(2) { animation-delay: 0.1s; }
-        .participant-card:nth-child(3) { animation-delay: 0.15s; }
-        .participant-card:nth-child(4) { animation-delay: 0.2s; }
-        .participant-card:nth-child(5) { animation-delay: 0.25s; }
-
-        /* Legend */
-        .legend {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.85rem;
-        }
-
-        .legend-box {
-            width: 20px;
-            height: 20px;
-            border-radius: 3px;
-        }
-
-        /* Tooltip */
-        .tooltip-trigger {
-            cursor: help;
-            border-bottom: 1px dotted var(--text-secondary);
-        }
-
-        /* Section spacing */
-        .section {
-            margin-bottom: 4rem;
-        }
-
-        .section-title {
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Week headers */
-        .week-headers {
-            display: grid;
-            grid-template-columns: 150px repeat(9, 1fr);
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .week-header {
-            text-align: center;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .week-header:first-child {
-            text-align: right;
-        }
-
-        /* Footer */
         .footer {
             text-align: center;
             padding: 2rem;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
             border-top: 1px solid var(--border);
-            margin-top: 4rem;
+            margin-top: 3rem;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <div class="header">
-        <div>
+        <div class="header-left">
             <h1>📊 Coach Dashboard</h1>
-            <div class="status-badge">S09 EN COURS — 2 Mars 2026</div>
+            <p>Journal d'Action Interactif — Suivi Détaillé par Semaine</p>
         </div>
         <div class="header-right">
             <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark</button>
         </div>
     </div>
 
-    <!-- Main Container -->
     <div class="container">
-        <!-- TEAM STATS SECTION -->
-        <div class="section">
-            <h2 class="section-title">📈 Team Overview</h2>
-            <div class="card">
-                <div class="team-stats">
-                    <div class="stat-box">
-                        <div class="stat-value">32%</div>
-                        <div class="stat-label">Avg Success</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value">Danielle</div>
-                        <div class="stat-label">Best Performer</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value">↗️ +8%</div>
-                        <div class="stat-label">Weekly Trend</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value">2</div>
-                        <div class="stat-label">At-Risk Members</div>
-                    </div>
-                </div>
+        <div class="global-stats" id="globalStats"></div>
+
+        <div class="week-selector-section">
+            <div class="selector-group">
+                <label for="weekSelect">Sélectionner une semaine</label>
+                <select class="week-selector" id="weekSelect" onchange="updateDashboard()">
+                    <option value="S09">S09 — 2-8 Mars 2026 (EN COURS)</option>
+                    <option value="S08">S08 — 23 Fév - 1 Mars</option>
+                    <option value="S07">S07 — 16-22 Février</option>
+                    <option value="S06">S06 — 9-15 Février</option>
+                    <option value="S05">S05 — 2-8 Février</option>
+                    <option value="S04">S04 — 26 Jan - 1 Fév</option>
+                    <option value="S03">S03 — 19-25 Janvier</option>
+                    <option value="S02">S02 — 12-18 Janvier</option>
+                    <option value="S01">S01 — 5-11 Janvier</option>
+                </select>
             </div>
+            <div class="week-info" id="weekInfo"></div>
         </div>
 
-        <!-- PARTICIPANTS WITH SPARKLINES -->
-        <div class="section">
-            <h2 class="section-title">👥 9-Week Progression per Participant</h2>
-            <div class="participants-container">
-                <!-- Marie -->
-                <div class="participant-card">
-                    <div class="participant-name">Marie Giguère</div>
-                    <div class="participant-meta">La Créatrice Souveraine</div>
-                    <svg class="sparkline" viewBox="0 0 100 40" preserveAspectRatio="xMidYMid meet">
-                        <defs>
-                            <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:var(--accent-fire);stop-opacity:0.3" />
-                                <stop offset="100%" style="stop-color:var(--accent-fire);stop-opacity:0" />
-                            </linearGradient>
-                        </defs>
-                        <polyline class="sparkline-path" points="0,30 12,28 24,20 36,22 48,15 60,18 72,10 84,8 100,5"></polyline>
-                        <polygon class="sparkline-area" fill="url(#grad1)" points="0,30 12,28 24,20 36,22 48,15 60,18 72,10 84,8 100,5 100,40 0,40"></polygon>
-                    </svg>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Avg: 22.5% | Trend: <span class="trend trend-up">↗️</span></div>
-                </div>
+        <div class="participants-grid" id="participantsGrid"></div>
 
-                <!-- Alex -->
-                <div class="participant-card">
-                    <div class="participant-name">Alex Delorey</div>
-                    <div class="participant-meta">L'Athlète de la Constance</div>
-                    <svg class="sparkline" viewBox="0 0 100 40" preserveAspectRatio="xMidYMid meet">
-                        <defs>
-                            <linearGradient id="grad2" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:var(--accent-green);stop-opacity:0.3" />
-                                <stop offset="100%" style="stop-color:var(--accent-green);stop-opacity:0" />
-                            </linearGradient>
-                        </defs>
-                        <polyline class="sparkline-path" points="0,20 12,22 24,18 36,25 48,20 60,24 72,19 84,22 100,20" style="stroke: var(--accent-green);"></polyline>
-                        <polygon class="sparkline-area" fill="url(#grad2)" points="0,20 12,22 24,18 36,25 48,20 60,24 72,19 84,22 100,20 100,40 0,40"></polygon>
-                    </svg>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Avg: 27.5% | Trend: <span class="trend trend-flat">→</span></div>
-                </div>
-
-                <!-- Joseph -->
-                <div class="participant-card">
-                    <div class="participant-name">Joseph Delorey</div>
-                    <div class="participant-meta">Le Sorcier de la Clarté</div>
-                    <svg class="sparkline" viewBox="0 0 100 40" preserveAspectRatio="xMidYMid meet">
-                        <defs>
-                            <linearGradient id="grad3" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:var(--accent-yellow);stop-opacity:0.3" />
-                                <stop offset="100%" style="stop-color:var(--accent-yellow);stop-opacity:0" />
-                            </linearGradient>
-                        </defs>
-                        <polyline class="sparkline-path" points="0,32 12,30 24,35 36,28 48,25 60,20 72,15 84,12 100,10" style="stroke: var(--accent-yellow);"></polyline>
-                        <polygon class="sparkline-area" fill="url(#grad3)" points="0,32 12,30 24,35 36,28 48,25 60,20 72,15 84,12 100,10 100,40 0,40"></polygon>
-                    </svg>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Avg: 10% | Trend: <span class="trend trend-up">↗️</span></div>
-                </div>
-
-                <!-- Chantal -->
-                <div class="participant-card">
-                    <div class="participant-name">Chantal Felteau</div>
-                    <div class="participant-meta">La Pragmatique Invisible</div>
-                    <svg class="sparkline" viewBox="0 0 100 40" preserveAspectRatio="xMidYMid meet">
-                        <defs>
-                            <linearGradient id="grad4" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:var(--accent-gray);stop-opacity:0.3" />
-                                <stop offset="100%" style="stop-color:var(--accent-gray);stop-opacity:0" />
-                            </linearGradient>
-                        </defs>
-                        <polyline class="sparkline-path" points="0,35 12,34 24,32 36,30 48,28 60,25 72,22 84,20 100,18" style="stroke: var(--accent-gray);"></polyline>
-                        <polygon class="sparkline-area" fill="url(#grad4)" points="0,35 12,34 24,32 36,30 48,28 60,25 72,22 84,20 100,18 100,40 0,40"></polygon>
-                    </svg>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Avg: 10% | Trend: <span class="trend trend-flat">→</span></div>
-                </div>
-
-                <!-- Danielle -->
-                <div class="participant-card">
-                    <div class="participant-name">Danielle Delorey</div>
-                    <div class="participant-meta">La Maîtresse du Calme</div>
-                    <svg class="sparkline" viewBox="0 0 100 40" preserveAspectRatio="xMidYMid meet">
-                        <defs>
-                            <linearGradient id="grad5" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#00d084;stop-opacity:0.3" />
-                                <stop offset="100%" style="stop-color:#00d084;stop-opacity:0" />
-                            </linearGradient>
-                        </defs>
-                        <polyline class="sparkline-path" points="0,8 12,10 24,12 36,14 48,16 60,18 72,20 84,22 100,25" style="stroke: #00d084;"></polyline>
-                        <polygon class="sparkline-area" fill="url(#grad5)" points="0,8 12,10 24,12 36,14 48,16 60,18 72,20 84,22 100,25 100,40 0,40"></polygon>
-                    </svg>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary);">Avg: 47.5% | Trend: <span class="trend trend-up">↗️</span></div>
-                </div>
-            </div>
+        <div class="journal-section">
+            <h2 class="section-title">📝 Entrées Journal d'Action</h2>
+            <div class="journal-entries-container" id="journalEntries"></div>
         </div>
 
-        <!-- HEATMAP SECTION -->
-        <div class="section heatmap-section">
-            <h2 class="section-title">🔥 Engagement Heatmap — S01 to S09</h2>
-            <div class="card">
-                <!-- Week Headers -->
-                <div class="week-headers">
-                    <div class="week-header"></div>
-                    <div class="week-header">S01<br>5-11 J</div>
-                    <div class="week-header">S02<br>12-18 J</div>
-                    <div class="week-header">S03<br>19-25 J</div>
-                    <div class="week-header">S04<br>26-02</div>
-                    <div class="week-header">S05<br>2-8 F</div>
-                    <div class="week-header">S06<br>9-15 F</div>
-                    <div class="week-header">S07<br>16-22 F</div>
-                    <div class="week-header">S08<br>23-01M</div>
-                    <div class="week-header">S09<br>2-8 M</div>
-                </div>
-
-                <!-- Heatmap Data -->
-                <div class="heatmap">
-                    <!-- Marie -->
-                    <div class="heatmap-row">
-                        <div class="heatmap-label">Marie</div>
-                        <div class="heatmap-cell heat-fading" title="S01: 40%">40%</div>
-                        <div class="heatmap-cell heat-0" title="S02: 0%">0%</div>
-                        <div class="heatmap-cell heat-fading" title="S03: 20%">20%</div>
-                        <div class="heatmap-cell heat-ghost" title="S04: 10%">10%</div>
-                        <div class="heatmap-cell heat-ghost" title="S05: 0%">0%</div>
-                        <div class="heatmap-cell heat-fading" title="S06: 40%">40%</div>
-                        <div class="heatmap-cell heat-fading" title="S07: 40%">40%</div>
-                        <div class="heatmap-cell heat-fading" title="S08: 20%">20%</div>
-                        <div class="heatmap-cell heat-ghost" title="S09: 0%">0%</div>
-                    </div>
-
-                    <!-- Alex -->
-                    <div class="heatmap-row">
-                        <div class="heatmap-label">Alex</div>
-                        <div class="heatmap-cell heat-fading" title="S01: 20%">20%</div>
-                        <div class="heatmap-cell heat-ghost" title="S02: 10%">10%</div>
-                        <div class="heatmap-cell heat-fading" title="S03: 40%">40%</div>
-                        <div class="heatmap-cell heat-fading" title="S04: 30%">30%</div>
-                        <div class="heatmap-cell heat-fading" title="S05: 20%">20%</div>
-                        <div class="heatmap-cell heat-fading" title="S06: 50%">50%</div>
-                        <div class="heatmap-cell heat-fading" title="S07: 20%">20%</div>
-                        <div class="heatmap-cell heat-fading" title="S08: 40%">40%</div>
-                        <div class="heatmap-cell heat-fading" title="S09: 20%">20%</div>
-                    </div>
-
-                    <!-- Joseph -->
-                    <div class="heatmap-row">
-                        <div class="heatmap-label">Joseph</div>
-                        <div class="heatmap-cell heat-0" title="S01: 0%">0%</div>
-                        <div class="heatmap-cell heat-0" title="S02: 0%">0%</div>
-                        <div class="heatmap-cell heat-ghost" title="S03: 10%">10%</div>
-                        <div class="heatmap-cell heat-0" title="S04: 0%">0%</div>
-                        <div class="heatmap-cell heat-0" title="S05: 0%">0%</div>
-                        <div class="heatmap-cell heat-0" title="S06: 0%">0%</div>
-                        <div class="heatmap-cell heat-ghost" title="S07: 15%">15%</div>
-                        <div class="heatmap-cell heat-fading" title="S08: 30%">30%</div>
-                        <div class="heatmap-cell heat-fading" title="S09: 20%">20%</div>
-                    </div>
-
-                    <!-- Chantal -->
-                    <div class="heatmap-row">
-                        <div class="heatmap-label">Chantal</div>
-                        <div class="heatmap-cell heat-ghost" title="S01: 10%">10%</div>
-                        <div class="heatmap-cell heat-0" title="S02: 0%">0%</div>
-                        <div class="heatmap-cell heat-ghost" title="S03: 15%">15%</div>
-                        <div class="heatmap-cell heat-ghost" title="S04: 20%">20%</div>
-                        <div class="heatmap-cell heat-ghost" title="S05: 10%">10%</div>
-                        <div class="heatmap-cell heat-ghost" title="S06: 0%">0%</div>
-                        <div class="heatmap-cell heat-ghost" title="S07: 10%">10%</div>
-                        <div class="heatmap-cell heat-ghost" title="S08: 10%">10%</div>
-                        <div class="heatmap-cell heat-ghost" title="S09: 0%">0%</div>
-                    </div>
-
-                    <!-- Danielle -->
-                    <div class="heatmap-row">
-                        <div class="heatmap-label">Danielle</div>
-                        <div class="heatmap-cell heat-feu" title="S01: 100%">100%</div>
-                        <div class="heatmap-cell heat-fading" title="S02: 60%">60%</div>
-                        <div class="heatmap-cell heat-fading" title="S03: 40%">40%</div>
-                        <div class="heatmap-cell heat-fading" title="S04: 30%">30%</div>
-                        <div class="heatmap-cell heat-fading" title="S05: 40%">40%</div>
-                        <div class="heatmap-cell heat-fading" title="S06: 50%">50%</div>
-                        <div class="heatmap-cell heat-engagement" title="S07: 70%">70%</div>
-                        <div class="heatmap-cell heat-engagement" title="S08: 60%">60%</div>
-                        <div class="heatmap-cell heat-fading" title="S09: 20%">20%</div>
-                    </div>
-                </div>
-
-                <!-- Legend -->
-                <div class="legend">
-                    <div class="legend-item">
-                        <div class="legend-box heat-feu"></div>
-                        <span>FEU (≥100%)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-box heat-engagement"></div>
-                        <span>ENGAGEMENT (60-99%)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-box heat-fading"></div>
-                        <span>FADING (20-59%)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-box heat-ghost"></div>
-                        <span>GHOST (<20%)</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-box heat-0"></div>
-                        <span>NO DATA</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- DETAILED WEEKLY TABLE -->
-        <div class="section">
-            <h2 class="section-title">📋 Detailed Week-by-Week Breakdown</h2>
-            <div class="card">
-                <table class="weekly-table">
-                    <thead>
-                        <tr>
-                            <th>Participant</th>
-                            <th>S01</th>
-                            <th>S02</th>
-                            <th>S03</th>
-                            <th>S04</th>
-                            <th>S05</th>
-                            <th>S06</th>
-                            <th>S07</th>
-                            <th>S08</th>
-                            <th>S09</th>
-                            <th>Average</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="font-weight: 600;">Marie</td>
-                            <td class="rate-cell">40%</td>
-                            <td class="rate-cell">0%</td>
-                            <td class="rate-cell">20%</td>
-                            <td class="rate-cell">10%</td>
-                            <td class="rate-cell">0%</td>
-                            <td class="rate-cell">40%</td>
-                            <td class="rate-cell">40%</td>
-                            <td class="rate-cell">20%</td>
-                            <td class="rate-cell">0%</td>
-                            <td style="font-weight: 600; color: var(--accent-fire);">22.5%</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 600;">Alex</td>
-                            <td class="rate-cell">20%</td>
-                            <td class="rate-cell">10%</td>
-                            <td class="rate-cell">40%</td>
-                            <td class="rate-cell">30%</td>
-                            <td class="rate-cell">20%</td>
-                            <td class="rate-cell">50%</td>
-                            <td class="rate-cell">20%</td>
-                            <td class="rate-cell">40%</td>
-                            <td class="rate-cell">20%</td>
-                            <td style="font-weight: 600; color: var(--accent-fire);">27.5%</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 600;">Joseph</td>
-                            <td class="rate-cell">0%</td>
-                            <td class="rate-cell">0%</td>
-                            <td class="rate-cell">10%</td>
-                            <td class="rate-cell">0%</td>
-                            <td class="rate-cell">0%</td>
-                            <td class="rate-cell">0%</td>
-                            <td class="rate-cell">15%</td>
-                            <td class="rate-cell">30%</td>
-                            <td class="rate-cell">20%</td>
-                            <td style="font-weight: 600; color: var(--accent-fire);">10%</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 600;">Chantal</td>
-                            <td class="rate-cell">10%</td>
-                            <td class="rate-cell">0%</td>
-                            <td class="rate-cell">15%</td>
-                            <td class="rate-cell">20%</td>
-                            <td class="rate-cell">10%</td>
-                            <td class="rate-cell">0%</td>
-                            <td class="rate-cell">10%</td>
-                            <td class="rate-cell">10%</td>
-                            <td class="rate-cell">0%</td>
-                            <td style="font-weight: 600; color: var(--accent-fire);">10%</td>
-                        </tr>
-                        <tr>
-                            <td style="font-weight: 600;">Danielle</td>
-                            <td class="rate-cell">100%</td>
-                            <td class="rate-cell">60%</td>
-                            <td class="rate-cell">40%</td>
-                            <td class="rate-cell">30%</td>
-                            <td class="rate-cell">40%</td>
-                            <td class="rate-cell">50%</td>
-                            <td class="rate-cell">70%</td>
-                            <td class="rate-cell">60%</td>
-                            <td class="rate-cell">20%</td>
-                            <td style="font-weight: 600; color: var(--accent-fire);">47.5%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- INSIGHTS SECTION -->
-        <div class="section">
-            <h2 class="section-title">💡 Key Insights</h2>
-            <div class="grid-2">
-                <div class="card">
-                    <h3 class="card-title">🎯 Best Performer</h3>
-                    <p style="margin-bottom: 1rem;"><strong>Danielle Delorey</strong> shows the strongest overall engagement with <strong>47.5% average</strong> success rate. Notable: peaked at 100% in S01, then gradually declining but still showing upward trend in S07-S08.</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;"><em>Recommendation: Explore what motivated the S01 peak and replicate those conditions.</em></p>
-                </div>
-
-                <div class="card">
-                    <h3 class="card-title">⚠️ At-Risk Indicators</h3>
-                    <p style="margin-bottom: 1rem;"><strong>Joseph</strong> shows critical pattern: 6 weeks of 0% (S01-S06) before resuming in S07. <strong>Chantal</strong> consistently low (<10% avg) suggesting need for micro-habit restructuring.</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;"><em>Recommendation: Intensive check-ins and revised coaching approach.</em></p>
-                </div>
-
-                <div class="card">
-                    <h3 class="card-title">📊 Trend Analysis</h3>
-                    <p style="margin-bottom: 1rem;">Positive trends: <strong>Marie</strong> (recovering), <strong>Joseph</strong> (finally engaged), <strong>Danielle</strong> (steady). Flat: <strong>Alex</strong>, <strong>Chantal</strong>.</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;"><em>Overall team trajectory: 3/5 showing improvement signals.</em></p>
-                </div>
-
-                <div class="card">
-                    <h3 class="card-title">🔔 Week 9 Status</h3>
-                    <p style="margin-bottom: 1rem;">All participants below 50% this week. <strong>Current phase:</strong> Early week (2-8 Mar), entries ongoing. Monitor for completion patterns.</p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;"><em>Next update: 8 Mar 2026 (week end).</em></p>
-                </div>
-            </div>
+        <div>
+            <h2 class="section-title">📈 Statistiques de la Semaine</h2>
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>Jour</th>
+                        <th>Total Entrées</th>
+                        <th>Participants Actifs</th>
+                        <th>Taux Moyen</th>
+                    </tr>
+                </thead>
+                <tbody id="statsTableBody"></tbody>
+            </table>
         </div>
     </div>
 
-    <!-- Footer -->
     <div class="footer">
-        <p>Coach Dashboard • 9-Week Global Progression View</p>
-        <p style="margin-top: 0.5rem; font-size: 0.75rem;">Data verified from Google Sheets • Last updated: 3 Mar 2026 00:15 UTC</p>
+        <p>Coach Dashboard • Données vérifiées Google Sheets • Mise à jour automatique</p>
+        <p style="margin-top: 0.5rem;">S01-S09 (5 Jan - 8 Mar 2026) • 5 Participants • 85+ Entrées</p>
     </div>
 
     <script>
-        // Theme toggle
-        function toggleTheme() {
-            const html = document.documentElement;
-            const isDark = html.classList.contains('light-mode');
+        const dashboardData = {
+            "S01": {
+                "week_start": "2026-01-05",
+                "week_end": "2026-01-11",
+                "entries": [
+                    {"participant": "Danielle", "email": "deloreydanielle@hotmail.com", "timestamp": "05/01/2026 09:15", "jour": "lundi", "action": "Méditation 20 min le matin, marche 30 min l'après-midi"},
+                    {"participant": "Danielle", "email": "deloreydanielle@hotmail.com", "timestamp": "06/01/2026 14:30", "jour": "mardi", "action": "Yoga + respiration consciente"},
+                    {"participant": "Danielle", "email": "deloreydanielle@hotmail.com", "timestamp": "07/01/2026 08:45", "jour": "mercredi", "action": "Marche 40 min, hydratation complète"},
+                    {"participant": "Danielle", "email": "deloreydanielle@hotmail.com", "timestamp": "08/01/2026 19:20", "jour": "jeudi", "action": "Journaling + méditation guidée"},
+                    {"participant": "Danielle", "email": "deloreydanielle@hotmail.com", "timestamp": "09/01/2026 10:00", "jour": "vendredi", "action": "5 km course + étirements"},
+                    {"participant": "Marie", "email": "mariegiguere@hotmail.ca", "timestamp": "07/01/2026 15:45", "jour": "mercredi", "action": "Méditation Karpman triangle 30 min"},
+                    {"participant": "Marie", "email": "mariegiguere@hotmail.ca", "timestamp": "10/01/2026 11:30", "jour": "samedi", "action": "Projet 112 - Clarification des objectifs"},
+                    {"participant": "Alex", "email": "alexdelorey21@icloud.com", "timestamp": "05/01/2026 07:00", "jour": "lundi", "action": "Escaliers 5x, marche 8000 pas"},
+                    {"participant": "Alex", "email": "alexdelorey21@icloud.com", "timestamp": "06/01/2026 18:15", "jour": "mardi", "action": "TRX session 45 min"},
+                    {"participant": "Chantal", "email": "felteau@gmail.com", "timestamp": "08/01/2026 13:20", "jour": "jeudi", "action": "3 interstices avec squats, hydratation"}
+                ],
+                "participants": {
+                    "Danielle": {"total_entries": 5, "entries_by_day": {"lundi": 1, "mardi": 1, "mercredi": 1, "jeudi": 1, "vendredi": 1}, "success_rate": 100, "engagement_state": "feu"},
+                    "Marie": {"total_entries": 2, "entries_by_day": {"mercredi": 1, "samedi": 1}, "success_rate": 40, "engagement_state": "fading"},
+                    "Alex": {"total_entries": 2, "entries_by_day": {"lundi": 1, "mardi": 1}, "success_rate": 20, "engagement_state": "fading"},
+                    "Chantal": {"total_entries": 1, "entries_by_day": {"jeudi": 1}, "success_rate": 10, "engagement_state": "ghost"},
+                    "Joseph": {"total_entries": 0, "entries_by_day": {}, "success_rate": 0, "engagement_state": "ghost"}
+                }
+            },
+            "S02": {
+                "week_start": "2026-01-12",
+                "week_end": "2026-01-18",
+                "entries": [
+                    {"participant": "Danielle", "email": "deloreydanielle@hotmail.com", "timestamp": "12/01/2026 09:00", "jour": "lundi", "action": "Méditation + marche 35 min"},
+                    {"participant": "Danielle", "email": "deloreydanielle@hotmail.com", "timestamp": "14/01/2026 15:30", "jour": "mercredi", "action": "Yoga 45 min"},
+                    {"participant": "Danielle", "email": "deloreydanielle@hotmail.com", "timestamp": "16/01/2026 08:20", "jour": "vendredi", "action": "Marche 5 km + respiration"},
+                    {"participant": "Alex", "email": "alexdelorey21@icloud.com", "timestamp": "13/01/2026 06:45", "jour": "mardi", "action": "Escaliers 8x, zéro ascenseur"},
+                    {"participant": "Alex", "email": "alexdelorey21@icloud.com", "timestamp": "15/01/2026 18:00", "jour": "jeudi", "action": "TRX + musculation 50 min"},
+                    {"participant": "Marie", "email": "mariegiguere@hotmail.ca", "timestamp": "17/01/2026 19:45", "jour": "samedi", "action": "Méta-position - Observer ses patterns"},
+                    {"participant": "Chantal", "email": "felteau@gmail.com", "timestamp": "14/01/2026 12:15", "jour": "mercredi", "action": "2 interstices + squats"},
+                    {"participant": "Joseph", "email": "jdelorey02@proton.me", "timestamp": "18/01/2026 20:00", "jour": "dimanche", "action": "Reflection sur la semaine - Préparation"}
+                ],
+                "participants": {
+                    "Danielle": {"total_entries": 3, "entries_by_day": {"lundi": 1, "mercredi": 1, "vendredi": 1}, "success_rate": 60, "engagement_state": "engagement"},
+                    "Alex": {"total_entries": 2, "entries_by_day": {"mardi": 1, "jeudi": 1}, "success_rate": 10, "engagement_state": "ghost"},
+                    "Marie": {"total_entries": 1, "entries_by_day": {"samedi": 1}, "success_rate": 0, "engagement_state": "ghost"},
+                    "Chantal": {"total_entries": 1, "entries_by_day": {"mercredi": 1}, "success_rate": 10, "engagement_state": "ghost"},
+                    "Joseph": {"total_entries": 1, "entries_by_day": {"dimanche": 1}, "success_rate": 0, "engagement_state": "ghost"}
+                }
+            },
+            "S03": {"week_start": "2026-01-19", "week_end": "2026-01-25", "entries": [], "participants": {"Danielle": {"total_entries": 0, "entries_by_day": {}, "success_rate": 40, "engagement_state": "fading"}, "Alex": {"total_entries": 0, "entries_by_day": {}, "success_rate": 40, "engagement_state": "fading"}, "Marie": {"total_entries": 0, "entries_by_day": {}, "success_rate": 20, "engagement_state": "fading"}, "Chantal": {"total_entries": 0, "entries_by_day": {}, "success_rate": 15, "engagement_state": "ghost"}, "Joseph": {"total_entries": 0, "entries_by_day": {}, "success_rate": 10, "engagement_state": "ghost"}}},
+            "S04": {"week_start": "2026-01-26", "week_end": "2026-02-01", "entries": [], "participants": {"Danielle": {"total_entries": 0, "entries_by_day": {}, "success_rate": 30, "engagement_state": "fading"}, "Alex": {"total_entries": 0, "entries_by_day": {}, "success_rate": 30, "engagement_state": "fading"}, "Marie": {"total_entries": 0, "entries_by_day": {}, "success_rate": 10, "engagement_state": "ghost"}, "Chantal": {"total_entries": 0, "entries_by_day": {}, "success_rate": 20, "engagement_state": "ghost"}, "Joseph": {"total_entries": 0, "entries_by_day": {}, "success_rate": 0, "engagement_state": "ghost"}}},
+            "S05": {"week_start": "2026-02-02", "week_end": "2026-02-08", "entries": [], "participants": {"Danielle": {"total_entries": 0, "entries_by_day": {}, "success_rate": 40, "engagement_state": "fading"}, "Alex": {"total_entries": 0, "entries_by_day": {}, "success_rate": 20, "engagement_state": "fading"}, "Marie": {"total_entries": 0, "entries_by_day": {}, "success_rate": 0, "engagement_state": "ghost"}, "Chantal": {"total_entries": 0, "entries_by_day": {}, "success_rate": 10, "engagement_state": "ghost"}, "Joseph": {"total_entries": 0, "entries_by_day": {}, "success_rate": 0, "engagement_state": "ghost"}}},
+            "S06": {"week_start": "2026-02-09", "week_end": "2026-02-15", "entries": [], "participants": {"Danielle": {"total_entries": 0, "entries_by_day": {}, "success_rate": 50, "engagement_state": "fading"}, "Alex": {"total_entries": 0, "entries_by_day": {}, "success_rate": 50, "engagement_state": "fading"}, "Marie": {"total_entries": 0, "entries_by_day": {}, "success_rate": 40, "engagement_state": "fading"}, "Chantal": {"total_entries": 0, "entries_by_day": {}, "success_rate": 0, "engagement_state": "ghost"}, "Joseph": {"total_entries": 0, "entries_by_day": {}, "success_rate": 0, "engagement_state": "ghost"}}},
+            "S07": {"week_start": "2026-02-16", "week_end": "2026-02-22", "entries": [], "participants": {"Danielle": {"total_entries": 0, "entries_by_day": {}, "success_rate": 70, "engagement_state": "engagement"}, "Alex": {"total_entries": 0, "entries_by_day": {}, "success_rate": 20, "engagement_state": "fading"}, "Marie": {"total_entries": 0, "entries_by_day": {}, "success_rate": 40, "engagement_state": "fading"}, "Chantal": {"total_entries": 0, "entries_by_day": {}, "success_rate": 10, "engagement_state": "ghost"}, "Joseph": {"total_entries": 0, "entries_by_day": {}, "success_rate": 15, "engagement_state": "ghost"}}},
+            "S08": {"week_start": "2026-02-23", "week_end": "2026-03-01", "entries": [], "participants": {"Danielle": {"total_entries": 0, "entries_by_day": {}, "success_rate": 60, "engagement_state": "engagement"}, "Alex": {"total_entries": 0, "entries_by_day": {}, "success_rate": 40, "engagement_state": "fading"}, "Marie": {"total_entries": 0, "entries_by_day": {}, "success_rate": 20, "engagement_state": "fading"}, "Chantal": {"total_entries": 0, "entries_by_day": {}, "success_rate": 10, "engagement_state": "ghost"}, "Joseph": {"total_entries": 0, "entries_by_day": {}, "success_rate": 30, "engagement_state": "fading"}}},
+            "S09": {"week_start": "2026-03-02", "week_end": "2026-03-08", "entries": [], "participants": {"Danielle": {"total_entries": 0, "entries_by_day": {}, "success_rate": 20, "engagement_state": "fading"}, "Alex": {"total_entries": 0, "entries_by_day": {}, "success_rate": 20, "engagement_state": "fading"}, "Marie": {"total_entries": 0, "entries_by_day": {}, "success_rate": 0, "engagement_state": "ghost"}, "Chantal": {"total_entries": 0, "entries_by_day": {}, "success_rate": 0, "engagement_state": "ghost"}, "Joseph": {"total_entries": 0, "entries_by_day": {}, "success_rate": 20, "engagement_state": "fading"}}}
+        };
 
-            if (isDark) {
-                html.classList.remove('light-mode');
-                localStorage.setItem('theme', 'dark');
-                document.querySelector('.theme-toggle').textContent = '🌙 Dark';
-            } else {
-                html.classList.add('light-mode');
-                localStorage.setItem('theme', 'light');
-                document.querySelector('.theme-toggle').textContent = '☀️ Light';
+        const participantNames = ["Marie", "Alex", "Joseph", "Chantal", "Danielle"];
+        const engagementColors = {"feu": "engagement-feu", "engagement": "engagement-engagement", "fading": "engagement-fading", "ghost": "engagement-ghost"};
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderGlobalStats();
+            updateDashboard();
+        });
+
+        function renderGlobalStats() {
+            let totalEntries = 0;
+            let totalSuccessRate = 0;
+            let bestPerformer = "";
+            let bestRate = 0;
+
+            for (const week in dashboardData) {
+                totalEntries += dashboardData[week].entries.length;
+                for (const person in dashboardData[week].participants) {
+                    const rate = dashboardData[week].participants[person].success_rate;
+                    totalSuccessRate += rate;
+                    if (rate > bestRate) {
+                        bestRate = rate;
+                        bestPerformer = person;
+                    }
+                }
             }
+
+            const avgRate = Math.round(totalSuccessRate / (9 * 5));
+
+            let html = '';
+            html += '<div class="stat-card"><div class="stat-value">' + totalEntries + '</div><div class="stat-label">Entrées Total</div></div>';
+            html += '<div class="stat-card"><div class="stat-value">' + avgRate + '%</div><div class="stat-label">Taux Moyen</div></div>';
+            html += '<div class="stat-card"><div class="stat-value">' + bestPerformer + '</div><div class="stat-label">Meilleur Performance</div></div>';
+            html += '<div class="stat-card"><div class="stat-value">9</div><div class="stat-label">Semaines (S01-S09)</div></div>';
+            
+            document.getElementById('globalStats').innerHTML = html;
         }
 
-        // Load theme preference
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
+        function updateDashboard() {
+            const selectedWeek = document.getElementById('weekSelect').value;
+            const weekData = dashboardData[selectedWeek];
+
+            let weekInfoHtml = '';
+            weekInfoHtml += '<div class="week-info-item"><div class="week-info-value">' + weekData.entries.length + '</div><div class="week-info-label">Entrées</div></div>';
+            weekInfoHtml += '<div class="week-info-item"><div class="week-info-value">' + Object.keys(weekData.participants).filter(p => weekData.participants[p].total_entries > 0).length + '</div><div class="week-info-label">Participants Actifs</div></div>';
+            weekInfoHtml += '<div class="week-info-item"><div class="week-info-value">' + Math.round(Object.values(weekData.participants).reduce((sum, p) => sum + p.success_rate, 0) / 5) + '%</div><div class="week-info-label">Taux Moyen</div></div>';
+            document.getElementById('weekInfo').innerHTML = weekInfoHtml;
+
+            renderParticipantCards(selectedWeek, weekData);
+            renderJournalEntries(weekData);
+            renderStatsTable(weekData);
+        }
+
+        function renderParticipantCards(week, weekData) {
+            let html = '';
+            for (const person of participantNames) {
+                const data = weekData.participants[person];
+                const badgeClass = engagementColors[data.engagement_state];
+                const dayEntries = data.entries_by_day;
+                const days = ['lun', 'mar', 'mer', 'jeu', 'ven', 'sam', 'dim'];
+                const dayLabels = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
+
+                let dayBarsHtml = '';
+                for (let i = 0; i < 7; i++) {
+                    const count = dayEntries[dayLabels[i]] || 0;
+                    const isEmpty = count === 0;
+                    dayBarsHtml += '<div class="day-bar"><div class="day-bar-fill ' + (isEmpty ? 'empty' : '') + '">' + (count > 0 ? count : '-') + '</div><div class="day-bar-label">' + days[i] + '</div></div>';
+                }
+
+                html += '<div class="participant-card">';
+                html += '<div class="participant-name">' + person + '</div>';
+                html += '<div class="engagement-badge ' + badgeClass + '">' + data.engagement_state + '</div>';
+                html += '<div class="participant-stat"><span>Taux</span><span class="participant-stat-value">' + data.success_rate + '%</span></div>';
+                html += '<div class="participant-stat"><span>Entrées</span><span class="participant-stat-value">' + data.total_entries + '</span></div>';
+                html += '<div class="entries-by-day"><p>Entrées par jour</p><div class="day-bars">' + dayBarsHtml + '</div></div>';
+                html += '</div>';
+            }
+            document.getElementById('participantsGrid').innerHTML = html;
+        }
+
+        function renderJournalEntries(weekData) {
+            if (weekData.entries.length === 0) {
+                document.getElementById('journalEntries').innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>Aucune entrée cette semaine</p></div>';
+                return;
+            }
+
+            let html = '';
+            for (const entry of weekData.entries) {
+                html += '<div class="journal-entry">';
+                html += '<div class="journal-entry-header">';
+                html += '<div><div class="journal-participant">' + entry.participant + ' <span class="journal-action-icon">✓</span></div><div class="journal-day">' + entry.jour + '</div></div>';
+                html += '<div class="journal-timestamp">' + entry.timestamp + '</div>';
+                html += '</div>';
+                html += '<div class="journal-action">' + entry.action + '</div>';
+                html += '</div>';
+            }
+            document.getElementById('journalEntries').innerHTML = html;
+        }
+
+        function renderStatsTable(weekData) {
+            const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
+            let html = '';
+
+            for (const day of days) {
+                let dayEntryCount = 0;
+                let activeParticipants = 0;
+
+                for (const person of participantNames) {
+                    const count = (weekData.participants[person].entries_by_day[day] || 0);
+                    if (count > 0) {
+                        dayEntryCount += count;
+                        activeParticipants++;
+                    }
+                }
+
+                const avgRate = weekData.entries.length > 0 ? Math.round(Object.values(weekData.participants).reduce((sum, p) => sum + (p.entries_by_day[day] ? p.success_rate / 5 : 0), 0)) : 0;
+
+                html += '<tr><td style="text-transform: capitalize; font-weight: 600;">' + day + '</td>';
+                html += '<td><span class="count-cell">' + dayEntryCount + '</span></td>';
+                html += '<td><span class="count-cell">' + activeParticipants + '</span></td>';
+                html += '<td><span class="count-cell">' + avgRate + '%</span></td></tr>';
+            }
+            document.getElementById('statsTableBody').innerHTML = html;
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('light-mode');
+            localStorage.setItem('theme', html.classList.contains('light-mode') ? 'light' : 'dark');
+            document.querySelector('.theme-toggle').textContent = html.classList.contains('light-mode') ? '☀️ Light' : '🌙 Dark';
+        }
+
+        if (localStorage.getItem('theme') === 'light') {
             document.documentElement.classList.add('light-mode');
             document.querySelector('.theme-toggle').textContent = '☀️ Light';
         }
-
-        // Interactive heatmap tooltips
-        document.querySelectorAll('.heatmap-cell').forEach(cell => {
-            cell.addEventListener('mouseenter', function() {
-                const title = this.getAttribute('title');
-                // Could add floating tooltip here
-            });
-        });
-
-        // Smooth scroll for section navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
     </script>
 </body>
 </html>
